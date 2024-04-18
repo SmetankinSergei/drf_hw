@@ -12,6 +12,7 @@ class LessonTestCase(APITestCase):
         self.user = User.objects.create(email='test@test.ru')
         self.client.force_authenticate(user=self.user)
         self.course = Course.objects.create(name='test', description='test')
+        self.course.owner = self.user
         self.lesson = Lesson.objects.create(
             name='test lesson',
             description='test',

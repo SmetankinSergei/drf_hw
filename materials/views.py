@@ -56,14 +56,13 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [~IsModerator, IsAuthenticated, IsOwner]
+    permission_classes = [IsOwner]
 
 
 class SubscriptionAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        """Реализация задания через post метод"""
         user = request.user
         course_id = request.data.get("course_id")
         course_item = get_object_or_404(Course, pk=course_id)
