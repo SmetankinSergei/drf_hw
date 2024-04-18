@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+from materials.models import Lesson
 from users.models import UserRoles
 
 
@@ -7,8 +8,9 @@ class IsOwner(BasePermission):
     message = "Вы не являетесь владельцем"
 
     def has_object_permission(self, request, view, obj):
-        if request.user == obj.owner:
-            return True
+        if isinstance(obj, Lesson):
+            course = obj.course
+            return request.user == course.owner
         return False
 
 
