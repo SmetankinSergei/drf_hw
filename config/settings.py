@@ -184,7 +184,7 @@ CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 
 CELERY_BEAT_SCHEDULE = {
     'check_inactive_users': {
-        'task': 'your_app.tasks.check_inactive_users',
+        'task': 'materials.tasks.check_inactive_users',
         'schedule': timezone.timedelta(days=1),
     },
 }
