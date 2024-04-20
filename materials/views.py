@@ -9,6 +9,7 @@ from materials.paginators import PagePagination
 from materials.permissions import IsOwner, IsModerator
 from materials.serializers import CourseSerializer, LessonSerializer
 from materials.stripe_service import StripeApi
+from .tasks import send_course_update_email
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -16,6 +17,12 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
     pagination_class = PagePagination
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        subscribers_emails = Subscription.objects.filter(course=instance).values_list('student__email', flat=True)
+        for email in subscribers_emails:
+            send_course_update_email.delay(email, instance.name)
 
     def get_permissions(self):
         permission_classes = []

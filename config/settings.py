@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+
+from django.utils import timezone
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -179,3 +181,10 @@ CORS_ALLOW_ALL_ORIGINS = False
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+
+CELERY_BEAT_SCHEDULE = {
+    'check_inactive_users': {
+        'task': 'your_app.tasks.check_inactive_users',
+        'schedule': timezone.timedelta(days=1),
+    },
+}
